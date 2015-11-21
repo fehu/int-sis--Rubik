@@ -19,7 +19,16 @@ lazy val rubik = ProjectRef(file("../A-Star"), "rubik")
 lazy val root = project in file(".") dependsOn rubik
 
 
-libraryDependencies += "feh.util" %% "util" % "1.0.9-SNAPSHOT"
+libraryDependencies ++= Seq(
+  "feh.util" %% "util" % "1.0.9-SNAPSHOT",
+  "org.nuiton.thirdparty" % "JRI" % "0.9-6"
+)
+
+lazy val rJavaGDHome = sys.env.getOrElse("R_JavaGD_HOME", sys.error("No 'R_JavaGD_HOME' environment variable set"))
+
+lazy val rJavaGDJars = Seq(
+  file(rJavaGDHome) / "java" ** "*.jar"
+)
 
 
 lazy val nxjHome = sys.env.getOrElse("NXJ_HOME", sys.error("No 'NXT_HOME' environment variable set"))
@@ -27,11 +36,16 @@ lazy val nxjHome = sys.env.getOrElse("NXJ_HOME", sys.error("No 'NXT_HOME' enviro
 lazy val nxjJars = Seq(
   file(nxjHome) / "lib" / "pc" ** "*.jar",
   file(nxjHome) / "lib" / "pc" / "3rdparty" ** "*.jar"
-).map(_.classpath).reduceLeft(_ ++ _)
+)
 
-unmanagedJars in Compile := nxjJars
 
-unmanagedJars in Runtime := nxjJars
+def myJars = nxjJars ++ rJavaGDJars
+
+lazy val myJarsClasspath = myJars.map(_.classpath).reduceLeft(_ ++ _)
+
+unmanagedJars in Compile := myJarsClasspath
+
+unmanagedJars in Runtime := myJarsClasspath
 
 
 
