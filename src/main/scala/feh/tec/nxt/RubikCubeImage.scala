@@ -51,8 +51,7 @@ object RubikCubeImage{
   def gatherSideColors(gatherColor: => Any) // java.awt.Color
                       (implicit motors: Motors, rcd: ReadColorsSequenceDescriptor) = //Side(Map())
     {
-      val center = {motors.lsm.get.rotateTo(rcd.centerLightAbsAngle); gatherColor}
-      Thread.sleep(100)
+      val center = {motors.lsm.get.rotateTo(rcd.centerLightAbsAngle); Thread.sleep(100); gatherColor}
 
       def rotate(ar: Int, al: Int) = {
         motors.lsm.get.rotateTo(al, true)
