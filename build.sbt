@@ -1,3 +1,5 @@
+import java.io.File
+
 organization := "feh.tec"
 
 name := "NXT-Rubik"
@@ -20,26 +22,73 @@ lazy val root = project in file(".") dependsOn rubik
 
 
 libraryDependencies ++= Seq(
-  "feh.util" %% "util" % "1.0.9-SNAPSHOT",
-  "org.nuiton.thirdparty" % "JRI" % "0.9-6"
-)
-
-lazy val rJavaGDHome = sys.env.getOrElse("R_JavaGD_HOME", sys.error("No 'R_JavaGD_HOME' environment variable set"))
-
-lazy val rJavaGDJars = Seq(
-  file(rJavaGDHome) / "java" ** "*.jar"
+  "feh.util" %% "util" % "1.0.9-SNAPSHOT"
+//  "org.nuiton.thirdparty" % "JRI" % "0.9-6"
 )
 
 
-lazy val nxjHome = sys.env.getOrElse("NXJ_HOME", sys.error("No 'NXT_HOME' environment variable set"))
+def fileFromEnvVar(v: String, errMsg: => String = null) = {
+  val err = Option(errMsg).getOrElse(s"No '$v' environment variable set")
+  file(sys.env.getOrElse(v, sys.error(err)))
+}
+
+lazy val rHome = fileFromEnvVar("R_HOME")
+
+lazy val rPackagesHome = fileFromEnvVar("R_PACKAGES_HOME")
+
+lazy val (rJava, rJavaGDHome) = (rPackagesHome / "rJava", rPackagesHome / "JavaGD")
+
+lazy val rJavaGDJars = Seq( rJavaGDHome / "java" ** "*.jar" )
+
+lazy val jriJars = Seq( rJava / "jri" ** "*.jar" )
+
+//lazy val rLib = fileFromEnvVar("R_LIB")
+
+
+lazy val libsPath = Seq(
+  rJavaGDHome / "libs",
+  rJava / "jri"
+)
+
+
+
+lazy val moreEnvVars = "LD_LIBRARY_PATH" -> {
+  val LD_LIBRARY_PATH = sys.env.getOrElse("LD_LIBRARY_PATH", "")
+  LD_LIBRARY_PATH + (rHome / "lib").absString + File.pathSeparatorChar
+}
+
+
+// doesn't work
+envVars in Compile += moreEnvVars
+
+// doesn't work
+
+envVars in Runtime += moreEnvVars
+
+// doesn't work
+envVars in console += moreEnvVars
+
+
+
+initialize ~= { _ =>
+  sys.props += "java.library.path" -> libsPath.map(_.absString).mkString(File.pathSeparator)
+  val LD_LIBRARY_PATH = sys.env.getOrElse("LD_LIBRARY_PATH", "") // .map(_ + File.pathSeparatorChar)
+  // doesn't work
+  System.setProperty("LD_LIBRARY_PATH", LD_LIBRARY_PATH + (rHome / "lib").absString + File.pathSeparatorChar)
+}
+
+
+
+
+lazy val nxjHome = fileFromEnvVar("NXJ_HOME", "No 'NXT_HOME' environment variable set")
 
 lazy val nxjJars = Seq(
-  file(nxjHome) / "lib" / "pc" ** "*.jar",
-  file(nxjHome) / "lib" / "pc" / "3rdparty" ** "*.jar"
+  nxjHome / "lib" / "pc" ** "*.jar",
+  nxjHome / "lib" / "pc" / "3rdparty" ** "*.jar"
 )
 
 
-def myJars = nxjJars ++ rJavaGDJars
+def myJars = nxjJars ++ rJavaGDJars ++ jriJars
 
 lazy val myJarsClasspath = myJars.map(_.classpath).reduceLeft(_ ++ _)
 

@@ -1,9 +1,15 @@
 package feh.tec.nxt
 
-import feh.tec.nxt.LegoRobotRubik._
-import lejos.nxt._
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
-object RobotTest extends App{
+import feh.tec.nxt.LegoRobotRubik._
+import feh.util.AbsolutePath
+import lejos.nxt._
+import org.rosuda.JRI.Rengine
+import rinterface._
+
+object CubeColorsTest extends App{
 
   lazy val ms = Motor.A
   lazy val mr = Motor.B
@@ -48,32 +54,31 @@ object RobotTest extends App{
     c -> cN
   }
 
-  while (true){
-    val c = gatherColor()
-    println(c) // + " - " + (c._2 - c._1)
-    Thread.sleep(500)
+  val RubikCubeImage(sides) = RubikCubeImage.readImage(gatherColor())
+
+
+  val RInterface = new RInterface(System.out)
+  RInterface.startR
+
+  val R = RInterface.engine
+
+  Rengine.DEBUG = 1
+
+  val rSideNames = ('A' to 'F').map(_.toString)
+
+  for((RubikCubeImage.Side(colors), i) <- sides zip rSideNames)
+    R.assign(i, colors.values.map(_.asInstanceOf[(Int, Int)]._2).toArray)
+
+  val dateFormat = DateTimeFormatter.ISO_LOCAL_DATE_TIME
+  val dir = AbsolutePath(sys.props("user.dir"))
+
+  val names = rSideNames.map(n => '\"' + n + '\"')
+
+  R.withPng(dir / "plots" / (LocalDateTime.now.format(dateFormat) + ".png")){
+    _.eval(s"boxplot(${rSideNames.mkString(",")}, names=${names.mkString("c(", ",", ")")})")
   }
 
-//  def gatherColors() = {
-//    ls.setFloodlight(false)
-//    val res = CubeSideAction.foreachCube{
-//      p =>
-//        Thread.sleep(300)
-//        val cLOff = ls.readNormalizedValue
-//        ls.setFloodlight(true)
-//        Thread.sleep(300)
-//        val cLOn = ls.readNormalizedValue
-//        ls.setFloodlight(false)
-//        Thread.sleep(300)
-//        p -> (cLOff, cLOn)
-//    }
-//
-//    ms.rotateTo(0)
-//    mr.rotateTo(1255)
-//
-//    res
-//  }
-
+  
 }
 
 /*
@@ -88,13 +93,6 @@ White:  264 254 265             | 254-265
  */
 
 /*
-
-Red:
-Blue:
-Green:
-Yellow:
-Orange:
-White:
 
 Vector((451,460),              (394,403),              (571,592),              (440,553),              (479,503),              (437,451))
 Vector((292,388,(352.4,31.5)), (287,339,(305.1,17.5)), (478,545,(506.2,24.0)), (462,523,(490.3,22.0)), (328,436,(379.0,32.7)), (252,361,(316.7,32.7)))
