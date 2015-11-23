@@ -29,7 +29,31 @@ object RubikCubeImage{
     def id = cubeId -> orientation
   }
 
+  def groupCubes[T: WithSideName](cubesSides: Map[CubeId, (SideName, T)]): Map[CubeId, CubeWithOrientation[T]] =
+    groupCubes(
+      cubesSides.toSeq.map{
+        case (id,(o, c)) => CubeSide(id, o, c)
+      }
+    )
+  def groupCubes[T: WithSideName](cubesSides: Seq[CubeSide[T]]): Map[CubeId, CubeWithOrientation[T]] =
+    cubesSides.groupBy(_.cubeId).mapValues{
+      case Seq(CubeSide(_, o1, c1), CubeSide(_, o2, c2), CubeSide(_, o3, c3))=>
+        Corner(c1, c2, c3) -> CubeOrientation(o1, o2, o3)
+      case Seq(CubeSide(_, o1, c1), CubeSide(_, o2, c2)) =>
+        Middle(c1, c2) -> CubeOrientation(o1, o2, null)
+      case Seq(CubeSide(_, o, c)) =>
+        Center(c) -> CubeOrientation(o, null, null)
+    }
+  
   def readCubes[T, C](gatherColor: => T)
+                     (implicit motors: Motors,
+                      ls: LightSensor,
+                      rd: RobotDescriptor,
+                      cMap: ColorMap[T, C],
+                      sMap: SidesMap,
+                      sName: WithSideName[C] ): Map[CubeId, CubeWithOrientation[C]] = readCubes(readImage(gatherColor))
+
+  def readCubes[T, C](img: RubikCubeImage[C])
                      (implicit motors: Motors,
                                ls: LightSensor,
                                rd: RobotDescriptor,
@@ -37,17 +61,12 @@ object RubikCubeImage{
                                sMap: SidesMap,
                                sName: WithSideName[C] ): Map[CubeId, CubeWithOrientation[C]] =
   {
-    val RubikCubeImage(sides) = readImage(gatherColor)
+    val RubikCubeImage(sides) = img
 
     def flip(x: Int) = x match{
       case 2 => 0
       case 1 => 1
       case 0 => 2
-    }
-
-    def mkSide(side: SideName, colors: Map[(Int, Int), C]) = {
-      val idsMap = sideCubes(side)
-      colors.map{ case (pos, c) => CubeSide(idsMap(pos), side, c) }
     }
 
     val cubesSides = sMap.readOrder zip sides flatMap {
@@ -70,23 +89,25 @@ object RubikCubeImage{
         mkSide(side, transposed)
     }
 
-    cubesSides.groupBy(_.cubeId).mapValues{
-      case Seq(CubeSide(_, o1, c1), CubeSide(_, o2, c2), CubeSide(_, o3, c3))=>
-        Corner(c1, c2, c3) -> CubeOrientation(o1, o2, o3)
-      case Seq(CubeSide(_, o1, c1), CubeSide(_, o2, c2)) =>
-        Middle(c1, c2) -> CubeOrientation(o1, o2, null)
-      case Seq(CubeSide(_, o, c)) =>
-        Center(c) -> CubeOrientation(o, null, null)
-    }
+    groupCubes(cubesSides)
   }
 
+  def mkSide[C](side: SideName, colors: Map[(Int, Int), C]) = {
+    val idsMap = sideCubes(side)
+    colors.map{ case (pos, c) => CubeSide(idsMap(pos), side, c) }
+  }
 
   def readImage[T, C](gatherColor: => T)
                      (implicit motors: Motors,
                                ls: LightSensor,
                                rd: RobotDescriptor,
-                               cmap: ColorMap[T, C] ): RubikCubeImage[C] =
-    readSomeImage(gatherColor).map(cmap.colorFor)
+                               cmap: ColorMap[T, C] ): RubikCubeImage[C] = readImage(readSomeImage(gatherColor))
+
+  def readImage[T, C](img: RubikCubeImage[T])
+                     (implicit motors: Motors,
+                      ls: LightSensor,
+                      rd: RobotDescriptor,
+                      cmap: ColorMap[T, C] ): RubikCubeImage[C] = img.map(cmap.colorFor)
 
   def readSomeImage[T](gatherColor: => T)
                       (implicit motors: Motors,
