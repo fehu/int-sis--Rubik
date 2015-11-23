@@ -85,7 +85,7 @@ trait RubikCubeTestGL[T] extends ShadersSupport with FlyingCamera with App3DExit
       ShaderProgramConf(Map(
         "projection"      -> projectionTransform,
         "lightColor"      -> (1.0f, 1.0f, 1.0f),
-        "ambient"         -> 0.1f,
+        "ambient"         -> 0.5f,
         "diffuse"         -> 0.5f
       ) ++ extra
       )

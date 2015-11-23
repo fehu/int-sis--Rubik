@@ -13,12 +13,12 @@ uniform float ambient;
 uniform float diffuse;
 
 
-vec3 lightF = vec3( 10, 0, 0);
-vec3 lightB = vec3(-10, 0, 0);
-vec3 lightR = vec3( 0,  10, 0);
-vec3 lightL = vec3( 0, -10, 0);
-vec3 lightU = vec3( 0, 0,  10);
-vec3 lightD = vec3( 0, 0, -10);
+vec3 lightF = vec3( 1, 0, 0);
+vec3 lightB = vec3(-1, 0, 0);
+vec3 lightR = vec3( 0,  1, 0);
+vec3 lightL = vec3( 0, -1, 0);
+vec3 lightU = vec3( 0, 0,  1);
+vec3 lightD = vec3( 0, 0, -1);
 
 void main(void) {
   vec3 lights[6];

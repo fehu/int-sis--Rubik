@@ -15,8 +15,8 @@ import java.io.PrintStream
 
 import org.rosuda.JRI.RMainLoopCallbacks
 import org.rosuda.JRI.Rengine
-import org.rosuda.javaGD.GDInterface
-import org.rosuda.javaGD.JGDBufferedPanel
+//import org.rosuda.javaGD.GDInterface
+//import org.rosuda.javaGD.JGDBufferedPanel
 
 import javax.swing.JFrame
 import javax.swing.WindowConstants
@@ -78,6 +78,7 @@ private class RConsole( out: PrintStream ) extends RMainLoopCallbacks {
   }
 }
 
+/*
 /**
  * Class providing the Frame that will function as a "Java Graphics Device" in R.
  * This class is not required, but can be used to extend the functionality of the
@@ -121,6 +122,7 @@ class RWindow extends GDInterface with WindowListener {
   def windowDeactivated( e: WindowEvent ) {}
 
 }
+*/
 
 /**
  * Create link to R
@@ -156,6 +158,7 @@ class RInterface( out: PrintStream ) {
     }
   }
 
+/*
   /**
    * Open a Java Graphics Device in R
    */
@@ -164,6 +167,7 @@ class RInterface( out: PrintStream ) {
     engine.eval( "library(JavaGD)" )
     engine.eval( "JavaGD(width=1000, height=600, ps=12)" )
   }
+*/
 
   override def finalize {
     // Seems not to be called ??

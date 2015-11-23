@@ -27,11 +27,6 @@ class ShaderProg(
     pp.acquire()
 
     for (_ <- using.program(pp)) {
-      def normalize(x: Float, y: Float, z: Float) = {
-        val len = x * x + y * y + z * z
-        (x / len, y / len, z / len)
-      }
-
       shaderConf.byName.foreach{ case (nme, x) => pp.uniform.updateDynamic(nme)(x) }
     }
 

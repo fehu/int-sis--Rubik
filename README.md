@@ -23,7 +23,7 @@ Requires **NXJ_HOME** environment variables set.
 Gathers statistics abous cube's side colors. 
 Uses [JRI](https://rforge.net/JRI/) for plotting with [R](https://www.r-project.org/).
 
-Requires the following environment variables set: **NXJ_HOME**, **R_HOME**, **R_PACKAGES_HOME**.
+Requires the following environment variables set: **NXJ_HOME**, **R_HOME**, **R_JAVA**, **LD_LIBRARY_PATH**.
 
 ### [NXT-GL](nxt-gl)
 Applications that use both [NXT](nxt) and [GL](gl).
