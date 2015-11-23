@@ -11,7 +11,17 @@ object RubikCubeTestGLAppRunner extends App{ PrepareNatives.andThen{ RubikCubeTe
 
 
 
-object RubikCubeTestGLApp extends RubikCubeTestGL[SideName]{
+object RubikCubeTestGLApp extends RubikCubeTestGLDefault{
+
+  val mutRubik = new MutableRubikCube[SideName](RubikSubCubesDefault.cubes)
+  val rubik = new RubikCubeInstance.MutableContainer(mutRubik.snapshot)
+
+  run()
+
+}
+
+trait RubikCubeTestGLDefault extends RubikCubeTestGL[SideName]{
+
   val displayX = 800
   val displayY = 600
 
@@ -36,12 +46,7 @@ object RubikCubeTestGLApp extends RubikCubeTestGL[SideName]{
   implicit def withSideName = RubikSubCubesDefault.WithSideNameIdentity
   implicit def colors = DefaultRubikColorScheme
 
-  val mutRubik = new MutableRubikCube[SideName](RubikSubCubesDefault.cubes)
-  val rubik = new RubikCubeInstance.MutableContainer(mutRubik.snapshot)
-
   protected def initialMouseXShift = -displayX / 100
   protected def initialMouseYShift = -displayY / 100
-
-  run()
 
 }
