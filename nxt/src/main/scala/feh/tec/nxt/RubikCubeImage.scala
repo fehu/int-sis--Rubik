@@ -15,6 +15,8 @@ object RubikCubeImage{
   }
 
   case class ColorMap[T, C](colorFor: PartialFunction[T, C])
+  case class ColorMapCreationError(reason: String) extends RuntimeException("Failed to create color map: " + reason)
+  
   case class ReadSide(name: SideName,
                       flipX: Boolean = false,
                       flipY: Boolean = false,

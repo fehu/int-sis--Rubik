@@ -15,3 +15,10 @@ Requires the following environment variables set:
 Writes images into [plots](/plots).
 
 Thanks to _Roelof Oomen_ for [his code](/nxt-r/src/main/scala/rinterface/RInterface.scala).
+
+### Executable **BuildColorMap**
+
+Reads colors from the cube and build a **ColorsMap**, that establishes limits between sides colors.
+
+Takes one optional argument: **file** to write the map in.
+

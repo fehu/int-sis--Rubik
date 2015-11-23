@@ -3,12 +3,15 @@ package feh.tec.nxt.run
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
+import feh.tec.nxt.RubikCubeImage.ColorMapCreationError
 import feh.tec.nxt._
 import feh.tec.nxt.run.RobotConfig.Default._
-import feh.util.AbsolutePath
+import feh.tec.rubik.RubikCube.SideName
+import feh.util._
+import feh.util.file._
 import rinterface._
 
-object CubeColorsTest extends App{
+object BuildColorMap extends App{
 
   var blink_? = false
 
@@ -23,21 +26,54 @@ object CubeColorsTest extends App{
 
 //  Rengine.DEBUG = 1
 
-  val rSideNames = ('A' to 'F').map(_.toString)
+  val rSideNames = SideName.values.toSeq
 
-  for((RubikCubeImage.Side(colors), i) <- sides zip rSideNames)
-    R.assign(i, colors.values.toArray)
+//  val colors = rSideNames.zip(1 to 6).toMap.mapValues(List.fill[Int](9)(_))
+  val colors = (
+    for((RubikCubeImage.Side(colors), i) <- sides zip rSideNames)
+    yield {
+      R.assign(i.toString, colors.values.toArray)
+      i -> colors.values
+    }
+  ).toMap
 
   val dateFormat = DateTimeFormatter.ISO_LOCAL_DATE_TIME
   val dir = AbsolutePath(sys.props("user.dir"))
 
-  val names = rSideNames.map(n => '\"' + n + '\"')
+  val names = rSideNames.map(n => '\"' + n.toString + '\"')
 
   R.withPng(dir / "plots" / (LocalDateTime.now.format(dateFormat) + ".png")){
     _.eval(s"boxplot(${rSideNames.mkString(",")}, names=${names.mkString("c(", ",", ")")})")
   }
 
-  
+  val minMax = colors.mapValues(vs => (vs.min, vs.max))
+    .toSeq
+    .sortBy(_._2._1)
+
+  val ranges = Y[(List[(SideName, (Int, Int))], Int), List[(SideName, (Int, Int))]](
+    rec => {
+      case ((side, (min1, max1)) :: (s2@(_, (min2, max2))) :: tail, prevMax) =>
+        if (max1 >= min2) throw ColorMapCreationError("some color domains intersect") // prevMax >= min1
+        val minLim = prevMax
+        val maxLim = (min2 + max1) / 2
+        (side, minLim -> maxLim) :: rec((s2 :: tail, maxLim))
+        case ((side, (min1, max1)) :: Nil, prevMax) =>
+          (side, prevMax -> Int.MaxValue) :: Nil
+    }
+  )(minMax.toList -> 0)
+
+  val rangesStr =
+    "strictly" + ranges
+      .map{ case (side, (min, max)) => Seq(min, max, side).mkString(", ") }
+      .mkString("\n", "\n", "\n")
+
+  println(rangesStr)
+
+  args.headOption.map(new File(_)).map{
+    _.withOutputStream(File.write.utf8(rangesStr))
+  }
+
+  sys.exit(0)
 }
 
 /*
