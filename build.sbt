@@ -105,5 +105,4 @@ initialCommands in console :=
     |import CubeSideAction._
     |import LegoRobotRubik._
     |
-    |import RobotTest._
   """.stripMargin

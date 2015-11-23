@@ -1,60 +1,19 @@
-package feh.tec.nxt
+package feh.tec.nxt.run
 
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-import feh.tec.nxt.LegoRobotRubik._
+import feh.tec.nxt._
+import feh.tec.nxt.run.RobotConfig.Default._
 import feh.util.AbsolutePath
-import lejos.nxt._
-import org.rosuda.JRI.Rengine
 import rinterface._
 
 object CubeColorsTest extends App{
 
-  lazy val ms = Motor.A
-  lazy val mr = Motor.B
-  lazy val mf = Motor.C
+  var blink_? = false
 
-  implicit lazy val ls = new LightSensor(SensorPort.S2)
-
-  implicit lazy val lsm = LightSensorMotor(ms)
-  implicit lazy val crm = CubeRotationMotor(mr)
-  implicit lazy val cfm = CubeFlipMotor(mf)
-
-  implicit lazy val motors = Motors(lsm, crm, cfm)
-
-  implicit lazy val rotateBottomDescriptor = RotateBottomDescriptor(316)
-  implicit lazy val flipDescriptor = FlipDescriptor(-70, Seq(30, 30, -30, -30)) // Seq(30, 30, -30, -30)
-  implicit lazy val holdDescriptor = HoldDescriptor(20)
-
-  implicit lazy val readColorsSequenceDescriptor = ReadColorsSequenceDescriptor(
-    indices = Seq(1 -> 1, 1 -> 0, 0 -> 0, 0 -> 1, 0 -> 2, 1 -> 2, 2 -> 2, 2 -> 1, 2 -> 0),
-    centerLightAbsAngle = 43, // 48
-    rotAngleDelta0 = 75,      // 50
-    rotAngleDeltaOdd = 158,  // 148 | 145 | 158
-    rotAngleDeltaEven = 158, // 168 | 165 | 158
-    lightAngleAbsOdd = 18,   // 17  | 19 | 20 | 25 | 20
-    lightAngleAbsEven = 25,  // 23       | 26 | 33 | 28
-    finalRotation = -79      // -55
-  )
-
-  def moveSensorTo(p: (Int, Int)) = CubeSideAction.motorPositionsMap(p) match {
-    case LightSensorPosition(sa, ra) =>
-      ms.rotateTo(sa)
-      mr.rotateTo(ra)
-  }
-
-  def gatherColor() = {
-    ls.setFloodlight(true)
-    Thread.sleep(300)
-    val c  = ls.readValue
-    val cN = ls.readNormalizedValue
-    ls.setFloodlight(false)
-//    (cLOff, cLOn)
-    c -> cN
-  }
-
-  val RubikCubeImage(sides) = RubikCubeImage.readImage(gatherColor())
+  if (!blink_?) ls.setFloodlight(true)
+  val RubikCubeImage(sides) = RubikCubeImage.readSomeImage(gatherColor(blink_?))
 
 
   val RInterface = new RInterface(System.out)
@@ -62,12 +21,12 @@ object CubeColorsTest extends App{
 
   val R = RInterface.engine
 
-  Rengine.DEBUG = 1
+//  Rengine.DEBUG = 1
 
   val rSideNames = ('A' to 'F').map(_.toString)
 
   for((RubikCubeImage.Side(colors), i) <- sides zip rSideNames)
-    R.assign(i, colors.values.map(_.asInstanceOf[(Int, Int)]._2).toArray)
+    R.assign(i, colors.values.toArray)
 
   val dateFormat = DateTimeFormatter.ISO_LOCAL_DATE_TIME
   val dir = AbsolutePath(sys.props("user.dir"))

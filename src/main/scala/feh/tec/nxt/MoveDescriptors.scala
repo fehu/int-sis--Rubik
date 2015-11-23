@@ -20,3 +20,9 @@ case class RotateBottomDescriptor(angle: Int)
 case class FlipDescriptor(safeLightSensorAngle: Int, angles: Seq[Int])
 
 case class HoldDescriptor(holdAngle: Int)
+
+case class RobotDescriptor(implicit val readCubeColors: ReadColorsSequenceDescriptor,
+                           implicit val rotateCubeBottom: RotateBottomDescriptor,
+                           implicit val flipCube: FlipDescriptor,
+                           implicit val holdCube: HoldDescriptor
+                            )
