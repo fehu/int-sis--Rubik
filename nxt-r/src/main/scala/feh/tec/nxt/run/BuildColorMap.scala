@@ -26,7 +26,7 @@ object BuildColorMap extends App{
 
 //  Rengine.DEBUG = 1
 
-  val rSideNames = SideName.values.toSeq
+  val rSideNames = SidesMaps.default.readOrder.map(_.name)
 
 //  val colors = rSideNames.zip(1 to 6).toMap.mapValues(List.fill[Int](9)(_))
   val colors = (
