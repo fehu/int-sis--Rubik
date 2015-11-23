@@ -12,3 +12,5 @@ Requires the following environment variables set:
 - **R_PACKAGES_HOME**: for example `/home/user/R/x86_64-pc-linux-gnu-library/3.2/`
 
 Writes images into [plots](/plots).
+
+Thanks to _Roelof Oomen_ for [his code](/nxt-r/src/main/scala/rinterface/RInterface.scala).
