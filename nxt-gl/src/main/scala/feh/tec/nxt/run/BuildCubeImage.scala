@@ -11,7 +11,7 @@ import feh.tec.rubik.ogl.run.RubikCubeTestGLDefault
 import feh.util.file._
 
 object BuildCubeImage extends RubikCubeTestGLDefault{
-  var blink_? = true
+  var blink_? = false
 
   if (args.isEmpty) {
     println("no SideNames file provided")
@@ -39,7 +39,7 @@ object BuildCubeImage extends RubikCubeTestGLDefault{
   val rawImgStr = imgToString(rawImage)
   val cubesImgStr = imgToString(cubesImg)
 
-  val fStr = timeStr + "\n\n" + rawImgStr + "\n\n" + cubesImgStr
+  val fStr = timeStr + "\n:RAW\n" + rawImgStr + "\n:SIDES\n" + cubesImgStr
 
   new File("cubes-image.log") withOutputStream File.write.utf8(fStr)
 

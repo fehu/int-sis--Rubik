@@ -23,6 +23,8 @@ object BuildColorMap extends App with ColorStats{
     .toSeq
     .sortBy(_._2._1)
 
+  boxplot()
+
   val ranges = Y[(List[(SideName, (Int, Int))], Int), List[(SideName, (Int, Int))]](
     rec => {
       case ((side, (min1, max1)) :: (s2@(_, (min2, max2))) :: tail, prevMax) =>
@@ -45,8 +47,6 @@ object BuildColorMap extends App with ColorStats{
   args.headOption.map(new File(_)).map{
     _.withOutputStream(File.write.utf8(rangesStr))
   }
-
-  boxplot()
 
   sys.exit(0)
 }
