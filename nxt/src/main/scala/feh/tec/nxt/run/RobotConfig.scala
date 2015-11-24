@@ -25,10 +25,10 @@ object RobotConfig {
     implicit lazy val readColorsSequenceDescriptor = ReadColorsSequenceDescriptor(
       indices = Seq(1 -> 1, 1 -> 0, 0 -> 0, 0 -> 1, 0 -> 2, 1 -> 2, 2 -> 2, 2 -> 1, 2 -> 0),
       centerLightAbsAngle = 43, // 48
-      rotAngleDelta0 = 75,      // 50
+      rotAngleDelta0 = 40,      // 50
       rotAngleDeltaOdd = 158,  // 148 | 145 | 158
       rotAngleDeltaEven = 158, // 168 | 165 | 158
-      lightAngleAbsOdd = 18,   // 17  | 19 | 20 | 25 | 20
+      lightAngleAbsOdd = 16,   // 17  | 19 | 20 | 25 | 20
       lightAngleAbsEven = 25,  // 23       | 26 | 33 | 28
       finalRotation = -79      // -55
     )

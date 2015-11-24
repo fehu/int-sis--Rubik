@@ -1,12 +1,17 @@
 package feh.tec.nxt
 
 import feh.tec.nxt.LegoRobotRubik.{remotely, LightSensorPosition, Motors}
+import feh.tec.nxt.RubikCubeImage.Side
 import feh.tec.rubik.RubikCube._
 import feh.util._
 import lejos.nxt.LightSensor
 
-case class RubikCubeImage[T](sides: Seq[RubikCubeImage.Side[T]]){
+case class RubikCubeImage[T](sides: Seq[Side[T]]){
   def map[R](f: T => R): RubikCubeImage[R] = copy(sides.map(_.map(f)))
+
+  def merge[T2](that: RubikCubeImage[T2]): RubikCubeImage[(T, T2)] = RubikCubeImage(
+    this.sides zip that.sides map { case (Side(c1), Side(c2)) => Side(c1 zipByKey c2) }
+  )
 }
 
 object RubikCubeImage{
@@ -117,9 +122,9 @@ object RubikCubeImage{
     import rd._
 
     def flip(n: Int) = {
-      ls.setFloodlight(false)
+//      ls.setFloodlight(false)
       remotely.flipCube(n)
-      ls.setFloodlight(true)
+//      ls.setFloodlight(true)
     }
 
     // Up

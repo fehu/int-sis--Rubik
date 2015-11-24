@@ -39,7 +39,7 @@ object BuildCubeImage extends RubikCubeTestGLDefault{
   val rawImgStr = imgToString(rawImage)
   val cubesImgStr = imgToString(cubesImg)
 
-  val fStr = timeStr + "\n:RAW\n" + rawImgStr + "\n:SIDES\n" + cubesImgStr
+  val fStr = timeStr + "\n:RAW\n" + rawImgStr + "\n:COLORS\n" + cubesImgStr
 
   new File("cubes-image.log") withOutputStream File.write.utf8(fStr)
 

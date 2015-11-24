@@ -11,7 +11,22 @@ object BuildColorMap extends App with ColorStats{
 
   var blink_? = false
 
+
+//  for (_ <- 1 to 3){
+//    ls.setFloodlight(true)
+//    Thread.sleep(100)
+//    ls.setFloodlight(false)
+//    Thread.sleep(900)
+//  }
+
   if (!blink_?) ls.setFloodlight(true)
+
+//  val lm = motors.lsm.get
+//  lm.rotateTo(0)
+//  lm.rotate(- readColorsSequenceDescriptor.centerLightAngle)
+//  Thread.sleep(200)
+//  lm.rotate(-1)
+//  lm.resetTachoCount()
 
   def plotsDir = AbsolutePath(sys.props("user.dir")) / "plots"
 
