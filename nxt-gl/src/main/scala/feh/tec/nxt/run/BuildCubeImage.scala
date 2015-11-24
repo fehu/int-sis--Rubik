@@ -29,10 +29,10 @@ object BuildCubeImage extends RubikCubeTestGLDefault{
   val timeStr = DateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.FULL).format(new Date())
 
 
-  def imgToString[T](img: RubikCubeImage[T]) = img.sides.zip(implicitly[SidesMap].readOrder).map{
+  def imgToString[T](img: RubikCubeImage[T]) = img.sides.zip(implicitly[SidesMap].readOrder).flatMap{
     case (RubikCubeImage.Side(colors), readSide) =>
       val cStrs = colors.toSeq.map{ case ((x, y), color) => Seq(x, y, color).mkString(", ") }
-      ("-- " + readSide) +: cStrs
+      ("-- " + readSide.name) +: cStrs
   }.mkString("\n")
 
 

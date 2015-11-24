@@ -47,7 +47,7 @@ object SidesMaps {
     ReadSide(SideName.Back, flipX = true, flipY = true),
     ReadSide(SideName.Down),
     ReadSide(SideName.Front),
-    ReadSide(SideName.Right),
+    ReadSide(SideName.Right, flipX = true),
     ReadSide(SideName.Left)
   ))
 

@@ -1,50 +1,23 @@
 package feh.tec.nxt.run
 
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
-
 import feh.tec.nxt.RubikCubeImage.ColorMapCreationError
 import feh.tec.nxt._
 import feh.tec.nxt.run.RobotConfig.Default._
 import feh.tec.rubik.RubikCube.SideName
 import feh.util._
 import feh.util.file._
-import rinterface._
 
-object BuildColorMap extends App{
+object BuildColorMap extends App with ColorStats{
 
   var blink_? = false
 
   if (!blink_?) ls.setFloodlight(true)
+
+  def plotsDir = AbsolutePath(sys.props("user.dir")) / "plots"
+
+  def filePrefix = ""
+
   val RubikCubeImage(sides) = RubikCubeImage.readSomeImage(gatherColor(blink_?))
-
-
-  val RInterface = new RInterface(System.out)
-  RInterface.startR
-
-  val R = RInterface.engine
-
-//  Rengine.DEBUG = 1
-
-  val rSideNames = SidesMaps.default.readOrder.map(_.name)
-
-//  val colors = rSideNames.zip(1 to 6).toMap.mapValues(List.fill[Int](9)(_))
-  val colors = (
-    for((RubikCubeImage.Side(colors), i) <- sides zip rSideNames)
-    yield {
-      R.assign(i.toString, colors.values.toArray)
-      i -> colors.values
-    }
-  ).toMap
-
-  val dateFormat = DateTimeFormatter.ISO_LOCAL_DATE_TIME
-  val dir = AbsolutePath(sys.props("user.dir"))
-
-  val names = rSideNames.map(n => '\"' + n.toString + '\"')
-
-  R.withPng(dir / "plots" / (LocalDateTime.now.format(dateFormat) + ".png")){
-    _.eval(s"boxplot(${rSideNames.mkString(",")}, names=${names.mkString("c(", ",", ")")})")
-  }
 
   val minMax = colors.mapValues(vs => (vs.min, vs.max))
     .toSeq
@@ -72,6 +45,8 @@ object BuildColorMap extends App{
   args.headOption.map(new File(_)).map{
     _.withOutputStream(File.write.utf8(rangesStr))
   }
+
+  boxplot()
 
   sys.exit(0)
 }
