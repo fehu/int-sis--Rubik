@@ -1,10 +1,9 @@
 package feh.tec.nxt.run
 
-import feh.tec.nxt.RubikCubeImage.Side
+import feh.tec.nxt.RubikCubeImage.{Side, SidesMap}
 import feh.tec.nxt.RubikCubeImageFromFile
-import feh.tec.rubik.RubikCube.SideName
-import feh.util.{AbsolutePath, Path}
 import feh.util.file._
+import feh.util.{AbsolutePath, Path}
 
 object ColorMapFromImg extends App with ColorStats{
 
@@ -18,16 +17,13 @@ object ColorMapFromImg extends App with ColorStats{
   def filePrefix = filePath.splittedName._1 + "-"
 
 
-  val sideNames = SidesMaps.default.readOrder.map(_.name)
-  val sideOrd = Ordering.by(sideNames.indexOf[SideName])
-
   // todo: needs the actual colors for each sub-cube side
 
   val sides: Seq[Side[Int]] = img.sides
     .flatMap(_.colors.values)
     .groupBy(_._2)
     .mapValues(_.map(_._1))
-    .toSeq.sortBy(_._1)(sideOrd)
+    .toSeq.sortBy(_._1)(SidesMap.ordering(SidesMaps.default))
     .map{
       case (_, vals) => Side((
         for {

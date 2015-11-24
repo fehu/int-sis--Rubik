@@ -29,6 +29,13 @@ object RubikCubeImage{
                        )
   case class SidesMap(readOrder: Seq[ReadSide])
 
+  object SidesMap{
+    def ordering(m: SidesMap): Ordering[SideName] = {
+      val sideNames = m.readOrder.map(_.name)
+      Ordering.by(sideNames.indexOf[SideName])
+    }
+  }
+
 
   case class CubeSide[C](cubeId: CubeId, orientation: SideName, color: C){
     def id = cubeId -> orientation
@@ -58,13 +65,8 @@ object RubikCubeImage{
                       sMap: SidesMap,
                       sName: WithSideName[C] ): Map[CubeId, CubeWithOrientation[C]] = readCubes(readImage(gatherColor))
 
-  def readCubes[T, C](img: RubikCubeImage[C])
-                     (implicit motors: Motors,
-                               ls: LightSensor,
-                               rd: RobotDescriptor,
-                               cMap: ColorMap[T, C],
-                               sMap: SidesMap,
-                               sName: WithSideName[C] ): Map[CubeId, CubeWithOrientation[C]] =
+  def readCubes[C: WithSideName](img: RubikCubeImage[C])
+                                (implicit sMap: SidesMap): Map[CubeId, CubeWithOrientation[C]] =
   {
     val RubikCubeImage(sides) = img
 

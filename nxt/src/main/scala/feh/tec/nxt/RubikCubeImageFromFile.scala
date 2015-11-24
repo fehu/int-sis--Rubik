@@ -1,27 +1,25 @@
 package feh.tec.nxt
 
-import feh.tec.nxt.RubikCubeImage.Side
+import feh.tec.nxt.RubikCubeImage.{SidesMap, Side}
+import feh.tec.nxt.run.SidesMaps
 import feh.tec.rubik.RubikCube.SideName
 import feh.util.file._
 
 
 trait RubikCubeImageFromFile {
 
-  def raw(lines: List[String]): RubikCubeImage[Int] = {
-    val data = readImageLines(extractChapter("RAW", lines), None)
-    RubikCubeImage(
-      data.groupBy(_._1)
-        .mapValues(l => Side(l.map(p => p._2 -> p._3.toInt).toMap))
-        .values.toSeq
-    )
-  }
+  def raw: List[String] => RubikCubeImage[Int] = extractImage("RAW", _.toInt)
 
-  def colors(lines: List[String]): RubikCubeImage[SideName] = {
-    val data = readImageLines(extractChapter("COLORS", lines), None)
+  def colors: List[String] => RubikCubeImage[SideName] = extractImage("COLORS", SideName.fromString)
+
+  def extractImage[R](chapter: String, f: String => R)(lines: List[String]): RubikCubeImage[R] = {
+    val data = readImageLines(extractChapter(chapter, lines))
     RubikCubeImage(
       data.groupBy(_._1)
-        .mapValues(l => Side(l.map(p => p._2 -> SideName.fromString(p._3)).toMap))
-        .values.toSeq
+        .mapValues(l => Side(l.map(p => p._2 -> f(p._3)).toMap))
+        .toSeq
+        .sortBy(_._1)(SidesMap.ordering(SidesMaps.default))
+        .map(_._2)
     )
   }
 
@@ -35,6 +33,8 @@ trait RubikCubeImageFromFile {
     .dropWhile(s => !s.startsWith(":" + chapter))
     .tail
     .takeWhile(s => !s.startsWith(":"))
+
+  protected def readImageLines(lines: List[String]): List[(SideName, (Int, Int), String)] = readImageLines(lines, None)
 
   protected def readImageLines(lines: List[String], side: Option[SideName]): List[(SideName, (Int, Int), String)] =
     lines match {
