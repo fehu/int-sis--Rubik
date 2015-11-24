@@ -22,10 +22,10 @@ object RubikCubeTestGLApp extends RubikCubeTestGLDefault{
 
 trait RubikCubeTestGLDefault extends RubikCubeTestGL[SideName]{
 
-  val displayX = 800
-  val displayY = 600
+  lazy val displayX = 800
+  lazy val displayY = 600
 
-  val fps = 30
+  lazy val fps = 30
 
   val contextAttributes = new ContextAttribs(2, 1)
   //    .withForwardCompatible(true)
@@ -37,8 +37,9 @@ trait RubikCubeTestGLDefault extends RubikCubeTestGL[SideName]{
 
   def cameraSpeed = 5.0
   def mouseSensibility = 0.05
-  def exitKey = Keyboard.KEY_ESCAPE
 
+  def exitKey = Keyboard.KEY_ESCAPE
+  def disableMouseKey = Some(Keyboard.KEY_F4)
 
   val shader: ShaderProg = Shaders.forGLSL("1.2")
   //        "lightDirection"  -> (0.0f, -1.0f, -1.0f),
