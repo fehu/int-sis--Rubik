@@ -1,9 +1,6 @@
 package feh.tec.nxt.run
 
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
-
-import feh.tec.nxt.RubikCubeImage
+import feh.tec.nxt.{NameUtils, RubikCubeImage}
 import feh.util.AbsolutePath
 import rinterface._
 
@@ -32,13 +29,11 @@ trait ColorStats {
       }
     ).toMap
 
-  lazy val dateFormat = DateTimeFormatter.ISO_LOCAL_DATE_TIME
-
   lazy val names = rSideNames.map(n => '\"' + n.toString + '\"')
 
   def boxplot() = {
     colors
-    R.withPng(plotsDir / (filePrefix + LocalDateTime.now.format(dateFormat) + ".png")){
+    R.withPng(plotsDir / NameUtils.formatDateFile(filePrefix, ".png")){
       _.eval(s"boxplot(${rSideNames.mkString(",")}, names=${names.mkString("c(", ",", ")")})")
     }
   }

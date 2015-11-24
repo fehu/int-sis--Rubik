@@ -3,18 +3,19 @@ package feh.tec.nxt.run
 import java.text.DateFormat
 import java.util.Date
 
-import feh.tec.nxt.RubikCubeImage
+import feh.tec.nxt.{NameUtils, RubikCubeImage}
 import feh.tec.nxt.RubikCubeImage.SidesMap
 import feh.tec.nxt.run.RobotConfig.Default._
 import feh.tec.rubik.RubikCubeInstance
 import feh.tec.rubik.ogl.run.RubikCubeTestGLDefault
+import feh.util.Path
 import feh.util.file._
 
 object BuildCubeImage extends RubikCubeTestGLDefault{
   var blink_? = false
 
   if (args.isEmpty) {
-    println("no SideNames file provided")
+    println("no Cube Color Map file provided")
     sys.exit(255)
   }
 
@@ -41,7 +42,9 @@ object BuildCubeImage extends RubikCubeTestGLDefault{
 
   val fStr = timeStr + "\n:RAW\n" + rawImgStr + "\n:COLORS\n" + cubesImgStr
 
-  new File("cubes-image.log") withOutputStream File.write.utf8(fStr)
+  val fPath = Path.relative("logs") / NameUtils.formatDateFile("rubik-image-", "rci")
+
+  fPath.file withOutputStream File.write.utf8(fStr)
 
   val initialCubes = RubikCubeImage.readCubes(cubesImg)
 
