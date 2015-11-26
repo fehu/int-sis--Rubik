@@ -1,18 +1,16 @@
-name := "Rubik-root"
+name := "rubik-root"
 
 publishArtifact := false
 
 CommonSettings()
 
 
-lazy val aStarRubik = ProjectRef(file("../A-Star"), "rubik")
-
 lazy val root = project in file(".") aggregate (GL, nxt, nxtR, nxtGL)
 
 
-lazy val GL     = project in file("gl") dependsOn aStarRubik
+lazy val GL     = project in file("gl")
 
-lazy val nxt    = project in file("nxt") dependsOn aStarRubik
+lazy val nxt    = project in file("nxt")
 
 lazy val nxtR   = project in file("nxt-r") dependsOn nxt
 

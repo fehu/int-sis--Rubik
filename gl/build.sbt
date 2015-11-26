@@ -1,4 +1,4 @@
-name := "Rubik-OpenGL"
+name := "rubik-opengl"
 
 version := "0.3-SNAPSHOT"
 

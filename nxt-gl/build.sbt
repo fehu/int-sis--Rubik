@@ -1,4 +1,4 @@
-name := "Rubik-NXT-GL"
+name := "rubik-nxt-gl"
 
 CommonSettings()
 

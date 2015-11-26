@@ -1,6 +1,6 @@
 import CommonSettings._
 
-name := "Rubik-NXT"
+name := "rubik-nxt"
 
 CommonSettings()
 

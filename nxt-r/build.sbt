@@ -1,7 +1,7 @@
 import CommonSettings._
 import java.io.File
 
-name := "Rubik-NXT-R"
+name := "rubik-nxt-r"
 
 CommonSettings()
 

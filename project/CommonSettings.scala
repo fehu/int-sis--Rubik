@@ -16,9 +16,14 @@ object CommonSettings{
     myJars := Nil,
     myJarsClasspath <<= myJars.map(_.map(_.classpath).reduceLeftOption(_ ++ _).getOrElse(Nil)),
     unmanagedJars in Compile := myJarsClasspath.value,
-    unmanagedJars in Runtime := myJarsClasspath.value
+    unmanagedJars in Runtime := myJarsClasspath.value,
+
+    libraryDependencies ++= Seq(
+        "feh.tec" %% "a-star" % "0.6",
+        "feh.tec" %% "a-star-rubik" % "0.3-SNAPSHOT"
+      )
   )
-  
+
   
   def fileFromEnvVar(v: String, errMsg: => String = null) = {
     val err = Option(errMsg).getOrElse(s"No '$v' environment variable set")
