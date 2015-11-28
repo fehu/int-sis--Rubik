@@ -1,8 +1,9 @@
 package feh.tec.nxt
 
-import feh.tec.nxt.RubikCubeImage.{SidesMap, Side}
 import feh.tec.nxt.run.SidesMaps
 import feh.tec.rubik.RubikCube.SideName
+import feh.tec.rubik.RubikCubeImage
+import feh.tec.rubik.RubikCubeImage.{SidesMap, Side}
 import feh.util.file._
 
 

@@ -1,7 +1,7 @@
 package feh.tec.nxt.run
 
-import feh.tec.nxt.RubikCubeImage.{Side, SidesMap}
 import feh.tec.nxt.RubikCubeImageFromFile
+import feh.tec.rubik.RubikCubeImage.{SidesMap, Side}
 import feh.util.file._
 import feh.util.{AbsolutePath, Path}
 

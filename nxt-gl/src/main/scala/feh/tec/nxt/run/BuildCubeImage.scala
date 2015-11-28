@@ -3,10 +3,10 @@ package feh.tec.nxt.run
 import java.text.DateFormat
 import java.util.Date
 
-import feh.tec.nxt.{NameUtils, RubikCubeImage}
-import feh.tec.nxt.RubikCubeImage.SidesMap
+import feh.tec.nxt.{NameUtils, RubikCubeImageNXT}
 import feh.tec.nxt.run.RobotConfig.Default._
-import feh.tec.rubik.RubikCubeInstance
+import feh.tec.rubik.RubikCubeImage.SidesMap
+import feh.tec.rubik.{RubikCubeImage, RubikCubeInstance}
 import feh.tec.rubik.ogl.run.RubikCubeTestGLDefault
 import feh.util.Path
 import feh.util.file._
@@ -24,8 +24,8 @@ object BuildCubeImage extends RubikCubeTestGLDefault{
 
   if (!blink_?) ls.setFloodlight(true)
 
-  val rawImage = RubikCubeImage.readSomeImage(gatherColor(blink_?))
-  val cubesImg = RubikCubeImage.readImage(rawImage)
+  val rawImage = RubikCubeImageNXT.readSomeImage(gatherColor(blink_?))
+  val cubesImg = RubikCubeImageNXT.readImage(rawImage)
 
   val timeStr = DateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.FULL).format(new Date())
 

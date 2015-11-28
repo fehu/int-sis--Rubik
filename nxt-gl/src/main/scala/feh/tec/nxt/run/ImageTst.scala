@@ -1,6 +1,6 @@
 package feh.tec.nxt.run
 
-import feh.tec.nxt.CreateRubikInstance
+import feh.tec.rubik.CreateRubikInstance
 import feh.tec.rubik.RubikCube.{Center, Corner, CubeOrientation, Middle}
 import feh.tec.rubik.ogl.run.RubikCubeTestGLDefault
 import feh.tec.rubik.RubikCube.SideName._

@@ -1,9 +1,10 @@
 package feh.tec.nxt.run
 
-import feh.tec.nxt.RubikCubeImage.ColorMapCreationError
 import feh.tec.nxt._
 import feh.tec.nxt.run.RobotConfig.Default._
 import feh.tec.rubik.RubikCube.SideName
+import feh.tec.rubik.RubikCubeImage
+import feh.tec.rubik.RubikCubeImage.ColorMapCreationError
 import feh.util._
 import feh.util.file._
 
@@ -32,7 +33,7 @@ object BuildColorMap extends App with ColorStats{
 
   def filePrefix = ""
 
-  val RubikCubeImage(sides) = RubikCubeImage.readSomeImage(gatherColor(blink_?))
+  val RubikCubeImage(sides) = RubikCubeImageNXT.readSomeImage(gatherColor(blink_?))
 
   val minMax = colors.mapValues(vs => (vs.min, vs.max))
     .toSeq

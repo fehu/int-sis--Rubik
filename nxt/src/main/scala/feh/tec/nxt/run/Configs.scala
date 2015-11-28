@@ -1,7 +1,7 @@
 package feh.tec.nxt.run
 
-import feh.tec.nxt.RubikCubeImage.{ReadSide, SidesMap, ColorMap}
 import feh.tec.rubik.RubikCube.SideName
+import feh.tec.rubik.RubikCubeImage.{ReadSide, SidesMap, ColorMap}
 import feh.util.file._
 import Ordering.Implicits._
 

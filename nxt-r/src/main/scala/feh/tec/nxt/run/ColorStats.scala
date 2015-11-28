@@ -1,6 +1,7 @@
 package feh.tec.nxt.run
 
-import feh.tec.nxt.{NameUtils, RubikCubeImage}
+import feh.tec.nxt.NameUtils
+import feh.tec.rubik.RubikCubeImage
 import feh.util.AbsolutePath
 import rinterface._
 

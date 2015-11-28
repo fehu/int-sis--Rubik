@@ -19,7 +19,7 @@ object CommonSettings{
     unmanagedJars in Runtime := myJarsClasspath.value,
 
     libraryDependencies ++= Seq(
-        "feh.tec" %% "a-star" % "0.6",
+        "feh.tec" %% "a-star" % "0.7-SNAPSHOT",
         "feh.tec" %% "a-star-rubik" % "0.3-SNAPSHOT"
       )
   )

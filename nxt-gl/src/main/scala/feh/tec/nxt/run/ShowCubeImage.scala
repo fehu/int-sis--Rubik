@@ -1,10 +1,10 @@
 package feh.tec.nxt.run
 
-import feh.tec.nxt.{CreateRubikInstance, RubikCubeImageFromFile}
-import feh.tec.rubik.solve.{RubikCubeHeuristics, RubikCube_A_*}
-import feh.tec.rubik.{RubikCubeInstance, RubikCube}
+import feh.tec.nxt.RubikCubeImageFromFile
 import feh.tec.rubik.RubikCube.SideName
 import feh.tec.rubik.ogl.run.RubikCubeTestGLDefault
+import feh.tec.rubik.solve.{RubikCubeHeuristics, RubikCube_A_*}
+import feh.tec.rubik.{CreateRubikInstance, RubikCubeInstance}
 import feh.util.Path
 import feh.util.file._
 
