@@ -1,7 +1,8 @@
 package feh.tec.nxt.run
 
 import feh.tec.rubik.CreateRubikInstance
-import feh.tec.rubik.RubikCube.{Center, Corner, CubeOrientation, Middle}
+import feh.tec.rubik.RubikCube._
+import feh.tec.rubik.RubikCubeInstance.InitialDescription
 import feh.tec.rubik.ogl.run.RubikCubeTestGLDefault
 import feh.tec.rubik.RubikCube.SideName._
 
@@ -37,7 +38,11 @@ object ImageTst extends RubikCubeTestGLDefault{
   )
 
 
-  val rubik = CreateRubikInstance(ImageTst.sides.toMap, None, "test")
+  val rubik = CreateRubikInstance(
+    ImageTst.sides.toMap.mapValues((CubeWithOrientation.apply[SideName] _).tupled),
+    None,
+    InitialDescription("test")
+  )
 
   run()
 

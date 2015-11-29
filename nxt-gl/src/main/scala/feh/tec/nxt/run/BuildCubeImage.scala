@@ -6,6 +6,7 @@ import java.util.Date
 import feh.tec.nxt.{NameUtils, RubikCubeImageNXT}
 import feh.tec.nxt.run.RobotConfig.Default._
 import feh.tec.rubik.RubikCubeImage.SidesMap
+import feh.tec.rubik.RubikCubeInstance.InitialDescription
 import feh.tec.rubik.{RubikCubeImage, RubikCubeInstance}
 import feh.tec.rubik.ogl.run.RubikCubeTestGLDefault
 import feh.util.Path
@@ -50,7 +51,7 @@ object BuildCubeImage extends RubikCubeTestGLDefault{
 
   initialCubes.foreach(println)
 
-  val rubik = RubikCubeInstance(initialCubes, None, "initial")
+  val rubik = RubikCubeInstance(initialCubes, None, InitialDescription("initial"))
 
   run()
 

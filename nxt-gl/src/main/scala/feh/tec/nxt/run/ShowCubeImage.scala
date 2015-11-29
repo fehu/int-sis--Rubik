@@ -2,6 +2,7 @@ package feh.tec.nxt.run
 
 import feh.tec.nxt.RubikCubeImageFromFile
 import feh.tec.rubik.RubikCube.SideName
+import feh.tec.rubik.RubikCubeInstance.InitialDescription
 import feh.tec.rubik.ogl.run.RubikCubeTestGLDefault
 import feh.tec.rubik.solve.{RubikCubeHeuristics, RubikCube_A_*}
 import feh.tec.rubik.{CreateRubikInstance, RubikCubeInstance}
@@ -15,7 +16,7 @@ trait WithCubeImage extends RubikCubeTestGLDefault{
   lazy val img = RubikCubeImageFromFile(file).map(_._2)
 
   implicit def sidesMap = SidesMaps.default
-  def mkInitialCube = CreateRubikInstance(img, None, filePath.splittedName._1)
+  def mkInitialCube = CreateRubikInstance(img, None, InitialDescription(filePath.splittedName._1))
 }
 
 
@@ -30,7 +31,7 @@ object ShowCubeImage extends WithCubeImage{
 
 object SolveCubeImage extends WithCubeImage{
 
-  val initial = CreateRubikInstance(img, None, filePath.splittedName._1)
+  val initial = CreateRubikInstance(img, None, InitialDescription(filePath.splittedName._1))
   val rubik = new RubikCubeInstance.MutableContainer(initial)
 
 
@@ -42,9 +43,13 @@ object SolveCubeImage extends WithCubeImage{
   println(res)
   val solution = res._1.get
 
-  val sParents = solver.listParents(solution)
+  val solveSeq = solver.listParents(solution).reverse
 
-  sParents.foreach(println)
+  solveSeq foreach{
+    step =>
+  }
+
+//  sParents.foreach(println)
 
 
 
