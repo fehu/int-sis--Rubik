@@ -49,7 +49,7 @@ class RubikRender[T: CubeColorScheme: WithSideName](val rubik: RubikCube[T],
   protected var currentCubeHash = rHash
 
   protected def shadersMap = rubik.cubes.map{
-    case (pos, (c, o)) =>
+    case (pos, CubeWithOrientation(c, o)) =>
       val vertices = Cube.coloredVertices(defaultColor, mkMp(c.labels, o))
       val transform = cubePose(pos, o) // todo: use Orientation
       c -> mkShaderInst(vertices, transform)
