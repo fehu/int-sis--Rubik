@@ -27,7 +27,7 @@ trait RubikCubeTestGL[T] extends ShadersSupport with FlyingCamera with App3DExit
   protected lazy val rotateUpRequested    = new MutableState(false)
   protected lazy val rotateDownRequested  = new MutableState(false)
 
-  override protected lazy val onKeyPressed: PartialFunction[KeyEvent, Unit] = super.onKeyPressed orElse {
+  override protected def onKeyPressed: PartialFunction[KeyEvent, Unit] = super.onKeyPressed orElse {
     case KeyEvent(Keyboard.KEY_ESCAPE) => exitRequested.set(true)
     case KeyEvent(Keyboard.KEY_F5)     => resetRequested.set(true)
     case KeyEvent(Keyboard.KEY_F10)    => disableRequested.set(!disableRequested.get)
