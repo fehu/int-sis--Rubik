@@ -7,25 +7,25 @@ import feh.tec.rubik.RubikCubeInstance.{InitialDescription, Rotation, RotationAn
 import feh.tec.rubik.ogl.App3DControls.{KeyEvent, MutableState, MutableStateHook}
 import feh.tec.rubik.ogl.run.RubikCubeTestGLDefault
 import feh.tec.rubik.solve.{RubikCubeHeuristics, RubikCube_A_*}
-import feh.tec.rubik.{CreateRubikInstance, RubikCubeInstance}
+import feh.tec.rubik.{RubikCube, CreateRubikInstance, RubikCubeInstance}
 import feh.util.Path
 import feh.util.file._
 import org.lwjgl.input.Keyboard
 
 import scala.concurrent.duration._
 
-trait WithCubeImage extends RubikCubeTestGLDefault{
+trait WithCubeImage[C <: RubikCube[SideName, C]] extends RubikCubeTestGLDefault[C]{
   lazy val filePath = Path(args.head, File.separatorChar)
   lazy val file = filePath.file
 
-  lazy val img = RubikCubeImageFromFile(file).map(_._2)
+  lazy val img = RubikCubeImageFromFile.colorsOnly(file)
 
   implicit def sidesMap = SidesMaps.default
   def mkInitialCube = CreateRubikInstance(img, None, InitialDescription(filePath.splittedName._1))
 }
 
-
-object ShowCubeImage extends WithCubeImage{
+// todo: move to GL
+object ShowCubeImage extends WithCubeImage[RubikCubeInstance[SideName]]{
 
 
   val rubik = mkInitialCube
@@ -33,8 +33,8 @@ object ShowCubeImage extends WithCubeImage{
   run()
 }
 
-
-object SolveCubeImage extends WithCubeImage{
+// todo: move to GL
+object SolveCubeImage extends WithCubeImage[RubikCubeInstance.MutableContainer[SideName]]{
 
   val sleepTime = 1.second
 

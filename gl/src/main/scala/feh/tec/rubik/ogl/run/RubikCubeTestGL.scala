@@ -2,7 +2,7 @@ package feh.tec.rubik.ogl.run
 
 import feh.tec.rubik.RubikCube._
 import feh.tec.rubik.ogl._
-import feh.tec.rubik.{MutableRubikCube, RubikCubeInstance, RubikSubCubesDefault}
+import feh.tec.rubik.{RubikCube, MutableRubikCube, RubikCubeInstance, RubikSubCubesDefault}
 import org.lwjgl.input.Keyboard
 import org.lwjgl.opengl.ContextAttribs
 import org.macrogl._
@@ -11,7 +11,7 @@ object RubikCubeTestGLAppRunner extends App{ PrepareNatives.andThen{ RubikCubeTe
 
 
 
-object RubikCubeTestGLApp extends RubikCubeTestGLDefault{
+object RubikCubeTestGLApp extends RubikCubeTestGLDefault[RubikCubeInstance.MutableContainer[SideName]]{
 
   val mutRubik = new MutableRubikCube[SideName](RubikSubCubesDefault.cubes)
   val rubik = new RubikCubeInstance.MutableContainer(mutRubik.snapshot)
@@ -20,7 +20,7 @@ object RubikCubeTestGLApp extends RubikCubeTestGLDefault{
 
 }
 
-trait RubikCubeTestGLDefault extends RubikCubeTestGL[SideName]{
+trait RubikCubeTestGLDefault[C <: RubikCube[SideName, C]] extends RubikCubeTestGL[SideName, C]  {
 
   lazy val displayX = 800
   lazy val displayY = 600

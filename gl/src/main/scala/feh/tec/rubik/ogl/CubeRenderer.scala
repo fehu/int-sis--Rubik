@@ -17,10 +17,11 @@ object CubeColorScheme{
 
 
 /** Renders given Rubik's Cube */
-class RubikRender[T: CubeColorScheme: WithSideName](val rubik: RubikCube[T],
-                                                    val shader: ShaderProg,
-                                                    projectionTransform: Matrix,
-                                                    disable: => Boolean )
+class RubikRender[T: CubeColorScheme: WithSideName, C <: RubikCube[T, C]](
+        val rubik: RubikCube[T, C],
+        val shader: ShaderProg,
+        projectionTransform: Matrix,
+        disable: => Boolean )
 {
   def defaultColor = (0.1f, 0.1f, 0.1f)
 

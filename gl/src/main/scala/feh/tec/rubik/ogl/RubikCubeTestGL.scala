@@ -7,9 +7,9 @@ import feh.util.Path
 import org.lwjgl.input.{Mouse, Keyboard}
 import org.lwjgl.opengl.DisplayMode
 
-trait RubikCubeTestGL[T] extends ShadersSupport with FlyingCamera with App3DExit{
+trait RubikCubeTestGL[T, C <: RubikCube[T, C]] extends ShadersSupport with FlyingCamera with App3DExit{
   val shader: ShaderProg
-  val rubik: RubikCube[T]
+  val rubik: RubikCube[T, C]
   implicit def colors: CubeColorScheme[T]
   implicit def withSideName: WithSideName[T]
 
