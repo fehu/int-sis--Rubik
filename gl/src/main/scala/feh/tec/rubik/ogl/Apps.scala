@@ -18,7 +18,10 @@ trait DisplayApp extends App {
 
   protected def execLoop(): Unit
 
-  protected def terminateApp(): Unit = Display.destroy()
+  protected def terminateApp(): Unit = {
+    Display.destroy()
+    sys.exit()
+  }
 
   def run() = {
     initApp()
