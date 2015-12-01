@@ -23,8 +23,9 @@ trait ColorStats {
 
   //  val colors = rSideNames.zip(1 to 6).toMap.mapValues(List.fill[Int](9)(_))
   lazy val colors = (
-    for((RubikCubeImage.Side(colors), i) <- sides zip rSideNames)
+    for((RubikCubeImage.Side(colors, sideOpt), side) <- sides zip rSideNames)
       yield {
+        val i = sideOpt.getOrElse(side)
         R.assign(i.toString, colors.values.toArray)
         i -> colors.values
       }
