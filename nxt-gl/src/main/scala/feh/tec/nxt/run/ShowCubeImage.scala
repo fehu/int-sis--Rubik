@@ -1,7 +1,7 @@
 package feh.tec.nxt.run
 
 import akka.actor.{Actor, ActorRef, ActorSystem, Props}
-import feh.tec.nxt.RubikCubeImageFromFile
+import feh.tec.rubik.RubikCubeImageFromFile
 import feh.tec.rubik.RubikCube.SideName
 import feh.tec.rubik.RubikCubeInstance.{InitialDescription, Rotation, RotationAngle}
 import feh.tec.rubik.ogl.App3DControls.{KeyEvent, MutableState, MutableStateHook}
