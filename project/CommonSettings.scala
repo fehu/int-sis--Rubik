@@ -20,7 +20,7 @@ object CommonSettings{
 
     libraryDependencies ++= Seq(
         "feh.tec" %% "a-star" % "0.7-SNAPSHOT",
-        "feh.tec" %% "a-star-rubik" % "0.3-SNAPSHOT"
+        "feh.tec" %% "a-star-rubik" % "0.4-SNAPSHOT"
       )
   )
 

@@ -15,17 +15,17 @@ lazy val jriJars = Seq[PathFinder]( rJava / "jri" ** "*.jar" )
 myJars ++= jriJars
 
 
-lazy val libsPath = Seq( rJava / "jri" )
+lazy val libsPath: Seq[File] = Seq( rJava / "jri" )
 
 
-// doesn't work
-//lazy val moreEnvVars = "LD_LIBRARY_PATH" -> {
-//  val LD_LIBRARY_PATH = sys.env.getOrElse("LD_LIBRARY_PATH", "")
-//  LD_LIBRARY_PATH + (rHome / "lib").absString + File.pathSeparatorChar
-//}
-//envVars in Compile += moreEnvVars
-//envVars in Runtime += moreEnvVars
-//envVars in console += moreEnvVars
+/* doesn't work
+lazy val moreEnvVars = "LD_LIBRARY_PATH" -> {
+  val LD_LIBRARY_PATH = sys.env.getOrElse("LD_LIBRARY_PATH", "")
+  LD_LIBRARY_PATH + (rHome / "lib").absString + File.pathSeparatorChar
+}
+envVars in Compile += moreEnvVars
+envVars in Runtime += moreEnvVars
+envVars in console += moreEnvVars*/
 
 
 
@@ -33,10 +33,11 @@ initialize ~= { _ =>
   fileFromEnvVar("R_HOME")          // ensure is set
   fileFromEnvVar("LD_LIBRARY_PATH") // ensure is set
   sys.props += "java.library.path" -> libsPath.map(_.absString).mkString(File.pathSeparator)
-// doesn't work
-//  val LD_LIBRARY_PATH = sys.env.getOrElse("LD_LIBRARY_PATH", "") // .map(_ + File.pathSeparatorChar)
-//  System.setProperty("LD_LIBRARY_PATH", LD_LIBRARY_PATH + (rHome / "lib").absString + File.pathSeparatorChar)
 }
+
+/*doesn't work
+  val LD_LIBRARY_PATH = sys.env.getOrElse("LD_LIBRARY_PATH", "") // .map(_ + File.pathSeparatorChar)
+  System.setProperty("LD_LIBRARY_PATH", LD_LIBRARY_PATH + (rHome / "lib").absString + File.pathSeparatorChar)*/
 
 
 
