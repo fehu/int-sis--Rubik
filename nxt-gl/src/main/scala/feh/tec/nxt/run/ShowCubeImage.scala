@@ -18,17 +18,21 @@ trait WithCubeImage[C <: RubikCube[SideName, C]] extends RubikCubeTestGLDefault[
   lazy val filePath = Path(args.head, File.separatorChar)
   lazy val file = filePath.file
 
+  lazy val prepared = args(1).toBoolean
+
   lazy val img = RubikCubeImageFromFile.colorsOnly(file)
 
   implicit def sidesMap = SidesMaps.default
-  def mkInitialCube = CreateRubikInstance(img, None, InitialDescription(filePath.splittedName._1))
+  lazy val descr = InitialDescription(filePath.splittedName._1)
+  lazy val initialCube = if(prepared) CreateRubikInstance.fromSnapshot(img, None, descr)
+                         else         CreateRubikInstance(img, None, descr)
 }
 
 // todo: move to GL
 object ShowCubeImage extends WithCubeImage[RubikCubeInstance[SideName]]{
 
 
-  val rubik = mkInitialCube
+  val rubik = initialCube
 
   run()
 }
@@ -38,14 +42,13 @@ object SolveCubeImage extends WithCubeImage[RubikCubeInstance.MutableContainer[S
 
   val sleepTime = 1.second
 
-  val initial = CreateRubikInstance(img, None, InitialDescription(filePath.splittedName._1))
-  val rubik = new RubikCubeInstance.MutableContainer(initial)
+  val rubik = new RubikCubeInstance.MutableContainer(initialCube)
 
 
   val solver = new RubikCube_A_*.WithTricks[SideName](RubikCubeHeuristics.SomeTricks.Stage1)
   solver.DEBUG = true
 
-  val res = solver.search(initial)
+  val res = solver.search(initialCube)
 
   println(res)
   val solution = res._1.get
@@ -108,7 +111,7 @@ object SolveCubeImage extends WithCubeImage[RubikCubeInstance.MutableContainer[S
       interrupt = true,
       sleepTime,
       SolutionSeq(solveSeq),
-      () => rubik.set(initial)
+      () => rubik.set(initialCube)
     )
   ))
 

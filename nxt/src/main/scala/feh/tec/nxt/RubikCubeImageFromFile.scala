@@ -17,10 +17,8 @@ trait RubikCubeImageFromFile {
     val data = readImageLines(extractChapter(chapter, lines))
     RubikCubeImage(
       data.groupBy(_._1)
-        .mapValues(l => Side(l.map(p => p._2 -> f(p._3)).toMap))
+        .map{ case (side, l) => Side(l.map(p => p._2 -> f(p._3)).toMap, Some(side))}
         .toSeq
-        .sortBy(_._1)(SidesMap.ordering(SidesMaps.default))
-        .map(_._2)
     )
   }
 
