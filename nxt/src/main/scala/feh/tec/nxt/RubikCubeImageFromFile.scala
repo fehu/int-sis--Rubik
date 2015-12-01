@@ -29,6 +29,7 @@ trait RubikCubeImageFromFile {
   def apply(lines: List[String]): FullImage = raw(lines) merge colors(lines)
   def apply(file: File): FullImage = apply( file.withInputStream(File.read[Seq[String]]).get.toList )
 
+  def colorsOnly(file: File): RubikCubeImage[SideName] = colors( file.withInputStream(File.read[Seq[String]]).get.toList )
 
   protected def extractChapter(chapter: String, lines: List[String]) = lines
     .dropWhile(s => !s.startsWith(":" + chapter))
