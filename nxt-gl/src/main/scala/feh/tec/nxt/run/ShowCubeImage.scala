@@ -1,13 +1,12 @@
 package feh.tec.nxt.run
 
 import akka.actor.{Actor, ActorRef, ActorSystem, Props}
-import feh.tec.rubik.RubikCubeImageFromFile
 import feh.tec.rubik.RubikCube.SideName
 import feh.tec.rubik.RubikCubeInstance.{InitialDescription, Rotation, RotationAngle}
 import feh.tec.rubik.ogl.App3DControls.{KeyEvent, MutableState, MutableStateHook}
 import feh.tec.rubik.ogl.run.RubikCubeTestGLDefault
 import feh.tec.rubik.solve.{RubikCubeHeuristics, RubikCube_A_*}
-import feh.tec.rubik.{RubikCube, CreateRubikInstance, RubikCubeInstance}
+import feh.tec.rubik.{RubikCubeImageIO, RubikCube, CreateRubikInstance, RubikCubeInstance}
 import feh.util.Path
 import feh.util.file._
 import org.lwjgl.input.Keyboard
@@ -20,7 +19,7 @@ trait WithCubeImage[C <: RubikCube[SideName, C]] extends RubikCubeTestGLDefault[
 
   lazy val prepared = args(1).toBoolean
 
-  lazy val img = RubikCubeImageFromFile.colorsOnly(file)
+  lazy val img = RubikCubeImageIO.colorsOnly(file)
 
   implicit def sidesMap = SidesMaps.default
   lazy val descr = InitialDescription(filePath.splittedName._1)

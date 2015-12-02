@@ -1,8 +1,7 @@
 package feh.tec.nxt.run
 
-import feh.tec.nxt.NameUtils
 import feh.tec.rubik.RubikCubeImage
-import feh.util.AbsolutePath
+import feh.util.{FileNameUtils, AbsolutePath}
 import rinterface._
 
 trait ColorStats {
@@ -35,7 +34,7 @@ trait ColorStats {
 
   def boxplot() = {
     colors
-    R.withPng(plotsDir / NameUtils.formatDateFile(filePrefix, ".png")){
+    R.withPng(plotsDir / FileNameUtils.formatDateFile(filePrefix, ".png")){
       _.eval(s"boxplot(${rSideNames.mkString(",")}, names=${names.mkString("c(", ",", ")")})")
     }
   }
