@@ -44,7 +44,7 @@ object SolveCubeImage extends WithCubeImage[RubikCubeInstance.MutableContainer[S
   val rubik = new RubikCubeInstance.MutableContainer(initialCube)
 
 
-  val solver = new RubikCube_A_*.WithTricks[SideName](
+  val solver = new RubikCube_A_*.WithTricksStage[SideName](
     RubikCubeHeuristics.SomeTricks.Stage1,
     RubikCubeHeuristics.DistanceMeasure.defaultMeasure
   )
@@ -52,7 +52,6 @@ object SolveCubeImage extends WithCubeImage[RubikCubeInstance.MutableContainer[S
 
   val res = solver.search(initialCube)
 
-  println(res)
   val solution = res._1.get
 
   val solveSeq = (solution +: solver.listParents(solution)).reverse.toList
