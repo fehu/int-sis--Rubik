@@ -2,7 +2,7 @@ package feh.tec.nxt.run
 
 import akka.actor.{Actor, ActorRef, ActorSystem, Props}
 import feh.tec.rubik.RubikCube.SideName
-import feh.tec.rubik.RubikCubeInstance.{InitialDescription, Rotation, RotationAngle}
+import feh.tec.rubik.RubikCube.{InitialDescription, Rotation, RotationAngle}
 import feh.tec.rubik.ogl.App3DControls.{KeyEvent, MutableState, MutableStateHook}
 import feh.tec.rubik.ogl.run.RubikCubeTestGLDefault
 import feh.tec.rubik.solve.{RubikCubeHeuristics, RubikCube_A_*}
@@ -44,7 +44,10 @@ object SolveCubeImage extends WithCubeImage[RubikCubeInstance.MutableContainer[S
   val rubik = new RubikCubeInstance.MutableContainer(initialCube)
 
 
-  val solver = new RubikCube_A_*.WithTricks[SideName](RubikCubeHeuristics.SomeTricks.Stage1)
+  val solver = new RubikCube_A_*.WithTricks[SideName](
+    RubikCubeHeuristics.SomeTricks.Stage1,
+    RubikCubeHeuristics.DistanceMeasure.defaultMeasure
+  )
   solver.DEBUG = true
 
   val res = solver.search(initialCube)
@@ -61,6 +64,7 @@ object SolveCubeImage extends WithCubeImage[RubikCubeInstance.MutableContainer[S
                                reInit: () => Unit)
     extends Actor
   {
+    var firstTime = true
     var running = false
 
     val showAct = context.system.actorOf(Props(new ShowSolutionActor(waitTime, self)))
@@ -78,7 +82,13 @@ object SolveCubeImage extends WithCubeImage[RubikCubeInstance.MutableContainer[S
 
     def show() = {
       reInit()
-      context.system.scheduler.scheduleOnce(waitTime, showAct, solutionSeq)(context.dispatcher)
+      val time =
+        if(firstTime) {
+          firstTime = false
+          0.nanos
+        }
+        else waitTime*2
+      context.system.scheduler.scheduleOnce(time, showAct, solutionSeq)(context.dispatcher)
     }
   }
 

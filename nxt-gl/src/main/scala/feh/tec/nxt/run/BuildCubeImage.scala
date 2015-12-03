@@ -6,7 +6,7 @@ import feh.tec.nxt.RubikCubeImageNXT
 import feh.tec.nxt.run.RobotConfig.Default._
 import feh.tec.rubik.RubikCube.SideName
 import feh.tec.rubik.RubikCubeImageIO.{ColorsImage, ImageType, RawImage}
-import feh.tec.rubik.RubikCubeInstance.InitialDescription
+import feh.tec.rubik.RubikCube.InitialDescription
 import feh.tec.rubik.ogl.run.RubikCubeTestGLDefault
 import feh.tec.rubik.{RubikCubeImage, RubikCubeImageIO, RubikCubeInstance}
 import feh.util.Path

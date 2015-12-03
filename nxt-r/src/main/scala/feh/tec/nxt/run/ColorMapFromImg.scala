@@ -1,6 +1,6 @@
 package feh.tec.nxt.run
 
-import feh.tec.rubik.RubikCubeImageFromFile
+import feh.tec.rubik.RubikCubeImageIO
 import feh.tec.rubik.RubikCubeImage.{SidesMap, Side}
 import feh.util.file._
 import feh.util.{AbsolutePath, Path}
@@ -9,7 +9,7 @@ object ColorMapFromImg extends App with ColorStats{
 
   val fileName = args.head
   val filePath = Path.absolute(fileName)
-  val img = RubikCubeImageFromFile(filePath.file)
+  val img = RubikCubeImageIO.read(filePath.file)
 
 
   def plotsDir = AbsolutePath(sys.props("user.dir")) / "plots"
