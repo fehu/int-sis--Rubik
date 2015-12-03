@@ -44,8 +44,8 @@ object SolveCubeImage extends WithCubeImage[RubikCubeInstance.MutableContainer[S
   val rubik = new RubikCubeInstance.MutableContainer(initialCube)
 
 
-  val solver = new RubikCube_A_*.WithTricksStage[SideName](
-    RubikCubeHeuristics.SomeTricks.Stage1,
+  val solver = new RubikCube_A_*.WithTricksStages[SideName](
+    RubikCubeHeuristics.SomeTricks.stages,
     RubikCubeHeuristics.DistanceMeasure.defaultMeasure
   )
   solver.DEBUG = true
