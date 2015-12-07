@@ -5,6 +5,7 @@ import feh.tec.rubik.RubikCube.SideName
 import feh.tec.rubik.RubikCube.{InitialDescription, Rotation, RotationAngle}
 import feh.tec.rubik.ogl.App3DControls.{KeyEvent, MutableState, MutableStateHook}
 import feh.tec.rubik.ogl.run.RubikCubeTestGLDefault
+import feh.tec.rubik.solve.RubikCubeHeuristics.DistanceMeasure
 import feh.tec.rubik.solve.{RubikCubeHeuristics, RubikCube_A_*}
 import feh.tec.rubik.{RubikCubeImageIO, RubikCube, CreateRubikInstance, RubikCubeInstance}
 import feh.util.Path
@@ -46,8 +47,11 @@ object SolveCubeImage extends WithCubeImage[RubikCubeInstance.MutableContainer[S
 
   val solver = new RubikCube_A_*.WithTricksStages[SideName](
     RubikCubeHeuristics.SomeTricks.stages,
+//    RubikCubeHeuristics.SomeTricks.Stage1 :: RubikCubeHeuristics.SomeTricks.Stage2 :: Nil,
     RubikCubeHeuristics.DistanceMeasure.defaultMeasure
   )
+
+//    DistanceMeasure.DEBUG = true
   solver.DEBUG = true
 
   val res = solver.search(initialCube)
